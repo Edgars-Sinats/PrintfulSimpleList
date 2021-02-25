@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">PrintfulSimpleList</string>
+    <string name="title">Title!</string>
+    <string name="this_is_description">This is a description.</string>
+
+
+    <string name="cannotRetData">Cannot retrieve data...\nTrying again in:</string>
+
+</resources>
