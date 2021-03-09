@@ -1,12 +1,17 @@
 package com.example.printfulsimplelist
 
+import android.accounts.AccountManager.get
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.util.Log
 import android.view.View
+import androidx.appcompat.view.ActionBarPolicy.get
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelStore
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.printfulsimplelist.adapters.RecyclerAdapter
+import com.example.printfulsimplelist.ui.main.MainViewModel
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -14,8 +19,13 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.lang.reflect.Array.get
+import java.util.EnumSet.of
+import java.util.List.of
 
 const val BASE_URL = "https://newsapi.org"
+private lateinit var viewModel: MainViewModel
+
 
 class MainActivity : AppCompatActivity() {
 
@@ -44,6 +54,8 @@ class MainActivity : AppCompatActivity() {
     private fun setUpRecyclerView() {
         rv_recyclerView.layoutManager = LinearLayoutManager(applicationContext)
         rv_recyclerView.adapter = RecyclerAdapter(titlesList, descList, imagesList, linksList)
+
+
     }
 
     //adds the items to our recyclerview
@@ -67,7 +79,10 @@ class MainActivity : AppCompatActivity() {
 
         Log.d("MainActivity.Load", "Retrofit\n")
 
-        //Global scope will be running even if parent will stop running.
+
+        Log.i(LOG_TAG, "Moshi data: ${viewModel.newsData}")
+
+//        Global scope will be running even if parent will stop running.
         GlobalScope.launch(Dispatchers.IO) {
             try {
                 val response = api.getNews()
@@ -90,7 +105,6 @@ class MainActivity : AppCompatActivity() {
 
                 }
             }
-
         }
     }
 

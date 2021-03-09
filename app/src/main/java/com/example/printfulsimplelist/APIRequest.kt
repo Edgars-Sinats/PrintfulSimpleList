@@ -1,6 +1,7 @@
 package com.example.printfulsimplelist
 
 import com.example.printfulsimplelist.api.NewsApiJSON
+import retrofit2.Response
 import retrofit2.http.GET
 
 interface APIRequest {
