@@ -66,6 +66,8 @@ class MainActivity : AppCompatActivity() {
             .create(APIRequest::class.java)
 
         Log.d("MainActivity.Load", "Retrofit\n")
+
+        //Global scope will be running even if parent will stop running.
         GlobalScope.launch(Dispatchers.IO) {
             try {
                 val response = api.getNews()
