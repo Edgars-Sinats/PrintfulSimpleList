@@ -10,10 +10,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.printfulsimplelist.R
 import com.example.printfulsimplelist.api.Article
-import com.example.printfulsimplelist.api.NewsApiJSON
 
 class MainRecyclerAdapter(val context: Context,
-                          val newsApi: List<NewsApiJSON>):
+                          val articleApi: List<Article>,
+                            val itemListener: ArticleItemListener):
         RecyclerView.Adapter<MainRecyclerAdapter.ViewHolder>(){
 
     inner class ViewHolder(itemView: View) :
@@ -23,20 +23,19 @@ class MainRecyclerAdapter(val context: Context,
         val itemPicture: ImageView = itemView.findViewById(R.id.iv_image)
             }
 
-    interface NewsItemListener {
-        fun onNewsItemClick(news: Article)
+    interface ArticleItemListener {
+        fun onArticleItemClick(news: Article)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val v = LayoutInflater.from(parent.context).inflate(R.layout.item_layout,parent,false)
-        return ViewHolder(v)
+        val inflater = LayoutInflater.from(parent.context)
+        val view = inflater.inflate(R.layout.item_layout, parent, false)
+        return ViewHolder(view)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val news = newsApi[0]
-        val response = news.articles[position]
+        val response = articleApi[position]
 //        for (news in news.articles) {
-//
 //        }
 
         with(holder) {
@@ -53,13 +52,13 @@ class MainRecyclerAdapter(val context: Context,
                     .into(itemPicture)
         }
 
-//        holder.itemView.setOnClickListener {
-//            itemListenerItem.onNewsItemClick(news)
-//        }
+        holder.itemView.setOnClickListener {
+            itemListener.onArticleItemClick(response)
+        }
     }
 
     override fun getItemCount(): Int {
-        return newsApi[0].articles.size
+        return articleApi.size
     }
 
 }

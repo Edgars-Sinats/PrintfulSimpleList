@@ -15,5 +15,5 @@ interface APIRequest {
      */
 
     @GET("/v2/top-headlines?country=lv&apiKey=04a42ee08c094f9580d3cb6e0bd5a43c")
-    suspend fun getNews() : NewsApiJSON
+    suspend fun getNews() : Response<NewsApiJSON>
 }

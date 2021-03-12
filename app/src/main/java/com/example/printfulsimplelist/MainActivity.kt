@@ -4,7 +4,6 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.util.Log
-import com.example.printfulsimplelist.data.NewsServices
 import com.example.printfulsimplelist.ui.main.MainViewModel
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
@@ -32,7 +31,7 @@ class MainActivity : AppCompatActivity() {
 //        makeAPIRequest()
         Log.i(LOG_TAG, "Main activity 1")
 
-        getNewsService()
+//        getNewsService()
 //        loadData()
 
     }
@@ -139,66 +138,32 @@ class MainActivity : AppCompatActivity() {
                 .addConverterFactory(MoshiConverterFactory.create(moshi))
                 .build()
 
-        val service = retrofit.create(NewsServices::class.java)
+        val service = retrofit.create(APIRequest::class.java)
         Log.i(LOG_TAG, "Bik further 3")
         corutines(service)
     }
 
-    fun corutines(service: NewsServices) {
+    fun corutines(service: APIRequest) {
         CoroutineScope(Dispatchers.IO).launch {
-            Log.i(LOG_TAG, "Bik further 4")
-            var success = true
-
-
-
-//            var response : NewsServices
             // Do the GET request and get response
             try {
-                val response = service.getLvNewsData().body()
+                val response = service.getNews().body()?.articles ?: emptyList()
 
                 val aSuc = response.toString()
                 Log.i(LOG_TAG, "First test: Success!<>., \n $aSuc")
             } catch (e: Exception,){
                 Log.i(LOG_TAG, "First test fail: $e")
-                success = false
             }
 
-            try {
-                val response = service.getLvNewsData()
-                val aBool = response.isSuccessful
-                Log.i(LOG_TAG, "Second test: Success: $aBool" )
-                success = true
-
-            } catch (e: Exception,){
-                Log.i(LOG_TAG, "second test fail: $e")
-                success = false
-            }
-            try {
-                val response = service.getLvNewsData()?.body()
-                val aBool = response?.articles?.get(1)
-                Log.i(LOG_TAG, "Third test: Success- Author: ${aBool?.author}" )
-                Log.i(LOG_TAG, "Third test: Success- Articles: $aBool" )
-            } catch (e: Exception,){
-                Log.i(LOG_TAG, "Third test fail: $e")
-                success = false
-            }
+        }
+//        finnaly(service)
         }
 
-
-
-//        finnaly(respo)
-
-
-
-        }
-
-        fun attempt2(){
-
-        }
-
-//        fun finnaly(response: NewsServices){
+//        fun finnaly(response: APIRequest){
 //            Log.i(LOG_TAG, response.toString())
 //            Log.i(LOG_TAG, "Bik further 2")
+//            response.
+//
 //            withContext(Dispatchers.Main) {
 //                if (response?.status.isNullOrEmpty()) {
 //                    Log.i(LOG_TAG, "Šaaize 1")
@@ -215,7 +180,7 @@ class MainActivity : AppCompatActivity() {
 //                }
 //            }
 //        }
-//    }
+
 
 
 }

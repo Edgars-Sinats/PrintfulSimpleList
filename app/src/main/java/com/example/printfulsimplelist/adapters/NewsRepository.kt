@@ -7,7 +7,6 @@ import androidx.lifecycle.MutableLiveData
 import com.example.printfulsimplelist.*
 import com.example.printfulsimplelist.api.Article
 import com.example.printfulsimplelist.api.NewsApiJSON
-import com.example.printfulsimplelist.data.NewsServices
 import com.squareup.moshi.JsonAdapter
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.Types
@@ -24,17 +23,16 @@ class NewsRepository (val app: Application){
 
     var newsData = MutableLiveData<List<NewsApiJSON>>()
     val newsData1 = MutableLiveData<NewsApiJSON>()
-    var newsData2 = MutableLiveData<NewsApiJSON>()
     val newsArticle = MutableLiveData<List<Article>>()
 
-    private val listType = Types.newParameterizedType(
-            List::class.java, NewsApiJSON::class.java
+    private val listTypeArticle = Types.newParameterizedType(
+            List::class.java, Article::class.java
     )
 
     init {
         Log.i(LOG_TAG, "Bik talak 5")
 
-        refreshDataFromWeb()
+        callDataFromWeb()
 //        val data = readDataFromCache()
 //        if (data.isEmpty()) {
 //        } else {
@@ -48,10 +46,11 @@ class NewsRepository (val app: Application){
 //        }
     }
 
-    fun refreshDataFromWeb() {
+    fun callDataFromWeb() {
         CoroutineScope(Dispatchers.IO).launch {
-            Log.i(LOG_TAG, "Bik talak 4")
-//            getNewsService()
+            callWebService()
+
+        //            getNewsService()
 //            getTextFromAssets()
         }
     }
@@ -63,7 +62,7 @@ class NewsRepository (val app: Application){
                     .add(KotlinJsonAdapterFactory())
                     .build()
             val adapter: JsonAdapter<NewsApiJSON> =
-                    moshi.adapter(listType)
+                    moshi.adapter(listTypeArticle)
 //            newsData2 = adapter.fromJson(text)
             newsData1.value = adapter.fromJson(data)
             val newsD = adapter.fromJson(data)
@@ -74,32 +73,34 @@ class NewsRepository (val app: Application){
 
 
     @WorkerThread
-    suspend fun getNewsService() {
+    suspend fun callWebService() {
         val moshi = Moshi.Builder()
                 .add(KotlinJsonAdapterFactory())
                 .build()
 
         val retrofit = Retrofit.Builder()
             .baseUrl(GLOBAL_BASE_URL)
-            .addConverterFactory(MoshiConverterFactory.create())
+            .addConverterFactory(MoshiConverterFactory.create(moshi))
             .build()
 
-        val service = retrofit.create(NewsServices::class.java)
+        val service = retrofit.create(APIRequest::class.java)
+//        val response = service.getNews()
+        val response = service.getNews().body()?.articles ?: emptyList()
+        newsArticle.postValue(response)
+
 
         // Do the GET request and get response
-          val response = service.getLvNewsData()
-
-        withContext(Dispatchers.Main) {
-            if (response.isSuccessful) {
-                val items = response.body()?.articles
-                if (items != null) {
-                    for (i in 0 until items.count()) {
-                        var author  = items[i].author ?: "N/A"
-//                        Log.d("Author: ", author)
-                    }
-                }
-            }
-        }
+//        withContext(Dispatchers.Main) {
+//            if (response.isSuccessful) {
+//                val items = response.body()?.articles
+//                if (items != null) {
+//                    for (i in 0 until items.count()) {
+//                        var author  = items[i].author ?: "N/A"
+////                        Log.d("Author: ", author)
+//                    }
+//                }
+//            }
+//        }
 
 //        newsData1.postValue(serviceData)
 //        saveDataToCache(sData)
