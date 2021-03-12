@@ -8,9 +8,13 @@ import com.example.printfulsimplelist.api.NewsApiJSON
 
 class MainViewModel(app: Application) : AndroidViewModel(app){
     private val dataRepo = NewsRepository(app)
-    val newsData = dataRepo.newsData
-//    val newsArticle = newsData.
+    val newsData = dataRepo.newsData1
+//    val newsArticle = newsData.val
 
     val selectedNews = MutableLiveData<NewsApiJSON>()
+
+    fun refreshData() {
+        dataRepo.refreshDataFromWeb()
+    }
 
 }

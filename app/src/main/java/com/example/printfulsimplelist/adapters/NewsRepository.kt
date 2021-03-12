@@ -1,10 +1,8 @@
 package com.example.printfulsimplelist.adapters
 
 import android.app.Application
-import android.graphics.Insets.add
 import android.util.Log
 import androidx.annotation.WorkerThread
-import androidx.core.view.OneShotPreDrawListener.add
 import androidx.lifecycle.MutableLiveData
 import com.example.printfulsimplelist.*
 import com.example.printfulsimplelist.api.Article
@@ -17,35 +15,96 @@ import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import retrofit2.*
 import retrofit2.converter.moshi.MoshiConverterFactory
+import java.io.File
 
 class NewsRepository (val app: Application){
 
     var newsData = MutableLiveData<List<NewsApiJSON>>()
+    val newsData1 = MutableLiveData<NewsApiJSON>()
+    var newsData2 = MutableLiveData<NewsApiJSON>()
     val newsArticle = MutableLiveData<List<Article>>()
 
+    private val listType = Types.newParameterizedType(
+            List::class.java, NewsApiJSON::class.java
+    )
+
     init {
+        Log.i(LOG_TAG, "Bik talak 5")
+
+        refreshDataFromWeb()
+//        val data = readDataFromCache()
+//        if (data.isEmpty()) {
+//        } else {
+//            newsData.value = data
+//            Log.i(LOG_TAG, "Using local data")
+//        }
         Log.i(LOG_TAG, "NewsRepository 2")
 
+//        CoroutineScope(Dispatchers.IO).launch {
+//            getNewsService()
+//        }
+    }
+
+    fun refreshDataFromWeb() {
         CoroutineScope(Dispatchers.IO).launch {
-            getNewsService()
+            Log.i(LOG_TAG, "Bik talak 4")
+//            getNewsService()
+//            getTextFromAssets()
         }
     }
 
+    fun getTextFromAssets(){
+        val data = FileHelper.getTextFromAssets(app, "apiLocal.json")
+        fun parseText(text: String) {
+            val moshi = Moshi.Builder()
+                    .add(KotlinJsonAdapterFactory())
+                    .build()
+            val adapter: JsonAdapter<NewsApiJSON> =
+                    moshi.adapter(listType)
+//            newsData2 = adapter.fromJson(text)
+            newsData1.value = adapter.fromJson(data)
+            val newsD = adapter.fromJson(data)
+            Log.i(LOG_TAG,
+                        "${newsD!!.articles} (\$${newsD.status})")
+        }
+    }
+
+
     @WorkerThread
     suspend fun getNewsService() {
-//        val moshi = Moshi.Builder()
-//                .add(KotlinJsonAdapterFactory())
-//                .build()
+        val moshi = Moshi.Builder()
+                .add(KotlinJsonAdapterFactory())
+                .build()
 
         val retrofit = Retrofit.Builder()
             .baseUrl(GLOBAL_BASE_URL)
             .addConverterFactory(MoshiConverterFactory.create())
             .build()
+
         val service = retrofit.create(NewsServices::class.java)
-        val serviceData = service.getLvNewsData().body() ?: emptyList()
-        newsData.postValue(serviceData)
+
+        // Do the GET request and get response
+          val response = service.getLvNewsData()
+
+        withContext(Dispatchers.Main) {
+            if (response.isSuccessful) {
+                val items = response.body()?.articles
+                if (items != null) {
+                    for (i in 0 until items.count()) {
+                        var author  = items[i].author ?: "N/A"
+//                        Log.d("Author: ", author)
+                    }
+                }
+            }
+        }
+
+//        newsData1.postValue(serviceData)
+//        saveDataToCache(sData)
+        Log.i(LOG_TAG, "Bik talak 3")
+
 
         Log.i(LOG_TAG, "NewsRepository 1")
 //        Log.i(LOG_TAG, "Service: ${service.toString()}")
@@ -61,5 +120,48 @@ class NewsRepository (val app: Application){
 //        val adapter: JsonAdapter<List<NewsApiJSON>> = moshi.adapter(listType)
 ////        return adapter.fromJson() ?: emptyList()
 //    }
+
+    private fun saveDataToCache(newsData: NewsApiJSON) {
+//        if (ContextCompat.checkSelfPermission(app,
+//                        Manifest.permission.WRITE_EXTERNAL_STORAGE)
+//                == PackageManager.PERMISSION_GRANTED
+//        ) {
+//
+//        }
+
+        Log.i(LOG_TAG, "Bik talak")
+            val moshi = Moshi.Builder().build()
+            val listType = Types.newParameterizedType(List::class.java, NewsApiJSON::class.java)
+            val adapter: JsonAdapter<NewsApiJSON> = moshi.adapter(listType)
+//        val s = adapter.
+            val json = adapter.toJson((newsData))
+            saveTextToFile(app, json)
+
+    }
+
+    fun saveTextToFile(app: Application, json: String?) {
+        val file = File(app.cacheDir, "news.json")
+        Log.i(LOG_TAG, "Bik talak 2")
+        file.writeText(json ?: "", Charsets.UTF_8)
+    }
+
+    fun readTextFile(app: Application): String? {
+        val file = File(app.cacheDir, "news.json")
+        return if(file.exists()){
+            file.readText()
+        } else null
+    }
+
+    private fun readDataFromCache(): List<NewsApiJSON> {
+        val json = readTextFile(app)
+        if (json == null) {
+            Log.i(LOG_TAG, "There is no file!")
+            return emptyList()
+        }
+        val moshi = Moshi.Builder().build()
+        val listType = Types.newParameterizedType(List::class.java, NewsApiJSON::class.java)
+        val adapter: JsonAdapter<List<NewsApiJSON>> = moshi.adapter(listType)
+        return adapter.fromJson(json) ?: emptyList()
+    }
 
 }

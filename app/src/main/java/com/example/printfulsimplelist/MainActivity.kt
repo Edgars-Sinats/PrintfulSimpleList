@@ -1,27 +1,16 @@
 package com.example.printfulsimplelist
 
-import android.accounts.AccountManager.get
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.util.Log
-import android.view.View
-import androidx.appcompat.view.ActionBarPolicy.get
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelStore
-import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.printfulsimplelist.adapters.RecyclerAdapter
+import com.example.printfulsimplelist.data.NewsServices
 import com.example.printfulsimplelist.ui.main.MainViewModel
-import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import com.squareup.moshi.Moshi
+import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
+import kotlinx.coroutines.*
 import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
-import java.lang.reflect.Array.get
-import java.util.EnumSet.of
-import java.util.List.of
+import retrofit2.converter.moshi.MoshiConverterFactory
 
 const val BASE_URL = "https://newsapi.org"
 private lateinit var viewModel: MainViewModel
@@ -42,6 +31,9 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 //        makeAPIRequest()
         Log.i(LOG_TAG, "Main activity 1")
+
+        getNewsService()
+//        loadData()
 
     }
 
@@ -129,4 +121,101 @@ class MainActivity : AppCompatActivity() {
 //        countdownTimer.start()
 //
 //    }
+
+//    suspend fun loadData(){
+//        getNewsService()
+//
+//    }
+
+
+
+    fun getNewsService() {
+        val moshi = Moshi.Builder()
+                .add(KotlinJsonAdapterFactory())
+                .build()
+
+        val retrofit = Retrofit.Builder()
+                .baseUrl(GLOBAL_BASE_URL)
+                .addConverterFactory(MoshiConverterFactory.create(moshi))
+                .build()
+
+        val service = retrofit.create(NewsServices::class.java)
+        Log.i(LOG_TAG, "Bik further 3")
+        corutines(service)
+    }
+
+    fun corutines(service: NewsServices) {
+        CoroutineScope(Dispatchers.IO).launch {
+            Log.i(LOG_TAG, "Bik further 4")
+            var success = true
+
+
+
+//            var response : NewsServices
+            // Do the GET request and get response
+            try {
+                val response = service.getLvNewsData().body()
+
+                val aSuc = response.toString()
+                Log.i(LOG_TAG, "First test: Success!<>., \n $aSuc")
+            } catch (e: Exception,){
+                Log.i(LOG_TAG, "First test fail: $e")
+                success = false
+            }
+
+            try {
+                val response = service.getLvNewsData()
+                val aBool = response.isSuccessful
+                Log.i(LOG_TAG, "Second test: Success: $aBool" )
+                success = true
+
+            } catch (e: Exception,){
+                Log.i(LOG_TAG, "second test fail: $e")
+                success = false
+            }
+            try {
+                val response = service.getLvNewsData()?.body()
+                val aBool = response?.articles?.get(1)
+                Log.i(LOG_TAG, "Third test: Success- Author: ${aBool?.author}" )
+                Log.i(LOG_TAG, "Third test: Success- Articles: $aBool" )
+            } catch (e: Exception,){
+                Log.i(LOG_TAG, "Third test fail: $e")
+                success = false
+            }
+        }
+
+
+
+//        finnaly(respo)
+
+
+
+        }
+
+        fun attempt2(){
+
+        }
+
+//        fun finnaly(response: NewsServices){
+//            Log.i(LOG_TAG, response.toString())
+//            Log.i(LOG_TAG, "Bik further 2")
+//            withContext(Dispatchers.Main) {
+//                if (response?.status.isNullOrEmpty()) {
+//                    Log.i(LOG_TAG, "Šaaize 1")
+//                }
+//                val items = response?.articles
+//                if (items != null) {
+//                    for (i in 0 until items.count()) {
+//                        var author  = items[i].author ?: "N/A"
+//                        Log.d("Author: ", author)
+//
+//                        var a = items[i].title ?: "N/A"
+//                        Log.d("Title: ", a)
+//                    }
+//                }
+//            }
+//        }
+//    }
+
+
 }

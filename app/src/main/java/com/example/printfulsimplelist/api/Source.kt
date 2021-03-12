@@ -1,6 +1,9 @@
 package com.example.printfulsimplelist.api
 
+import com.squareup.moshi.JsonClass
+
+@JsonClass(generateAdapter = true)
 data class Source(
-    val id: Any,
-    val name: String
+    val id: Char?,
+    val name: String?
 )

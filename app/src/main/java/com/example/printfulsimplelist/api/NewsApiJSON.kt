@@ -1,10 +1,14 @@
 package com.example.printfulsimplelist.api
 
+import com.google.gson.annotations.SerializedName
+import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
-@JsonClass(generateAdapter = true)
+//@JsonClass(generateAdapter = true)
 data class NewsApiJSON(
-    val articles: List<Article>,
-    val status: String,
-    val totalResults: Int
-)
+        @field:Json(name = "articles")    val articles: List<Article>,
+        @field:Json(name = "status")      val status: String,
+        @field:Json(name = "totalResults")val totalResults: Int
+) {
+
+}
