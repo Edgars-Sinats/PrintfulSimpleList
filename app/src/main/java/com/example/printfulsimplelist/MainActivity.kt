@@ -1,18 +1,20 @@
 package com.example.printfulsimplelist
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.util.Log
-import com.example.printfulsimplelist.ui.main.MainViewModel
+import androidx.appcompat.app.AppCompatActivity
+import com.example.printfulsimplelist.api.APIRequest
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 
 const val BASE_URL = "https://newsapi.org"
-private lateinit var viewModel: MainViewModel
+//private lateinit var viewModel: MainViewModel
 
 
 class MainActivity : AppCompatActivity() {
@@ -29,7 +31,6 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 //        makeAPIRequest()
-        Log.i(LOG_TAG, "Main activity 1")
 
 //        getNewsService()
 //        loadData()
@@ -139,7 +140,6 @@ class MainActivity : AppCompatActivity() {
                 .build()
 
         val service = retrofit.create(APIRequest::class.java)
-        Log.i(LOG_TAG, "Bik further 3")
         corutines(service)
     }
 
@@ -151,7 +151,7 @@ class MainActivity : AppCompatActivity() {
 
                 val aSuc = response.toString()
                 Log.i(LOG_TAG, "First test: Success!<>., \n $aSuc")
-            } catch (e: Exception,){
+            } catch (e: Exception){
                 Log.i(LOG_TAG, "First test fail: $e")
             }
 

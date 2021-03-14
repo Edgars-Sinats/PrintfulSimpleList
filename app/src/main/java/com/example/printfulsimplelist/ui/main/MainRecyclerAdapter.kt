@@ -1,4 +1,4 @@
-package com.example.printfulsimplelist.adapters
+package com.example.printfulsimplelist.ui.main
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -13,19 +13,11 @@ import com.example.printfulsimplelist.api.Article
 
 class MainRecyclerAdapter(val context: Context,
                           val articleApi: List<Article>,
-                            val itemListener: ArticleItemListener):
+                          val itemListener: ArticleItemListener
+):
         RecyclerView.Adapter<MainRecyclerAdapter.ViewHolder>(){
 
-    inner class ViewHolder(itemView: View) :
-            RecyclerView.ViewHolder(itemView){
-        val itemTitle: TextView = itemView.findViewById(R.id.tv_title)
-        val itemDetail: TextView = itemView.findViewById(R.id.tv_description)
-        val itemPicture: ImageView = itemView.findViewById(R.id.iv_image)
-            }
 
-    interface ArticleItemListener {
-        fun onArticleItemClick(news: Article)
-    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
@@ -50,15 +42,26 @@ class MainRecyclerAdapter(val context: Context,
             Glide.with(context)
                     .load(response.urlToImage)
                     .into(itemPicture)
-        }
 
-        holder.itemView.setOnClickListener {
-            itemListener.onArticleItemClick(response)
+            holder.itemView.setOnClickListener {
+                itemListener.onArticleItemClick(response)
+            }
         }
     }
 
     override fun getItemCount(): Int {
         return articleApi.size
+    }
+
+    inner class ViewHolder(itemView: View) :
+        RecyclerView.ViewHolder(itemView){
+        val itemTitle: TextView = itemView.findViewById(R.id.titletext)
+        val itemDetail: TextView = itemView.findViewById(R.id.descriptionText)
+        val itemPicture: ImageView = itemView.findViewById(R.id.newsImage)
+    }
+
+    interface ArticleItemListener {
+        fun onArticleItemClick(article: Article)
     }
 
 }

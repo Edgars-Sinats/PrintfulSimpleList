@@ -1,4 +1,4 @@
-package com.example.printfulsimplelist
+package com.example.printfulsimplelist.api
 
 import com.example.printfulsimplelist.api.NewsApiJSON
 import retrofit2.Response

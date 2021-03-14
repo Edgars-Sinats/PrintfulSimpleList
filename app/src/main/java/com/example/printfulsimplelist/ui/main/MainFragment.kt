@@ -15,18 +15,16 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.printfulsimplelist.LOG_TAG
 import com.example.printfulsimplelist.R
-import com.example.printfulsimplelist.adapters.MainRecyclerAdapter
 import com.example.printfulsimplelist.api.Article
+import com.example.printfulsimplelist.ui.shared.SharedViewModel
 
-class MainFragment : Fragment() ,
+class MainFragment : Fragment(),
  MainRecyclerAdapter.ArticleItemListener {
 
-    private lateinit var viewModel: MainViewModel
+    private lateinit var viewModel: SharedViewModel
     private lateinit var recyclerView: RecyclerView
     private lateinit var swipeLayout: SwipeRefreshLayout
     private lateinit var navController: NavController
-    private var change: String = ""
-
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -37,7 +35,6 @@ class MainFragment : Fragment() ,
             supportActionBar?.setDisplayHomeAsUpEnabled(false)
         }
 
-        Log.i(LOG_TAG, "Fragment 1")
         val view =inflater.inflate(R.layout.fragment_main, container, false)
         recyclerView = view.findViewById(R.id.recyclerView)
         navController = Navigation.findNavController(
@@ -48,12 +45,9 @@ class MainFragment : Fragment() ,
             viewModel.refreshData()
         }
 
-        //123
-        viewModel = ViewModelProvider(requireActivity()).get(MainViewModel::class.java)
-
-//        viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
-        Log.i(LOG_TAG, "Main fragment 1")
-        viewModel.articleData.observe(viewLifecycleOwner, Observer {
+        viewModel = ViewModelProvider(requireActivity()).get(SharedViewModel::class.java)
+        viewModel.articleData.observe(viewLifecycleOwner, Observer
+        {
             val adapter = MainRecyclerAdapter(requireContext(), it, this)
             recyclerView.adapter = adapter
             swipeLayout.isRefreshing = false
@@ -62,10 +56,12 @@ class MainFragment : Fragment() ,
         return view
     }
 
-    override fun onArticleItemClick(news: Article) {
-        Log.i(LOG_TAG, "Selected title: ${news.title}")
-
+    override fun onArticleItemClick(article: Article) {
+        Log.i(LOG_TAG, "Selected title: ${article.title}")
+        Log.i(LOG_TAG, "Selected author: ${article.author}\n urlImg: ${article.urlToImage}")
+        Log.i(LOG_TAG, "Selected article: ${article}")
+        viewModel.selectedArticle.value = article
+        navController.navigate(R.id.action_nav_detail)
     }
-
 
 }

@@ -1,12 +1,10 @@
-package com.example.printfulsimplelist.adapters
+package com.example.printfulsimplelist.api
 
 import android.app.Application
 import android.util.Log
 import androidx.annotation.WorkerThread
 import androidx.lifecycle.MutableLiveData
 import com.example.printfulsimplelist.*
-import com.example.printfulsimplelist.api.Article
-import com.example.printfulsimplelist.api.NewsApiJSON
 import com.squareup.moshi.JsonAdapter
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.Types
@@ -14,15 +12,13 @@ import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import retrofit2.*
 import retrofit2.converter.moshi.MoshiConverterFactory
 import java.io.File
 
 class NewsRepository (val app: Application){
 
-    var newsData = MutableLiveData<List<NewsApiJSON>>()
-    val newsData1 = MutableLiveData<NewsApiJSON>()
+//    val newsData1 = MutableLiveData<NewsApiJSON>()
     val newsArticle = MutableLiveData<List<Article>>()
 
     private val listTypeArticle = Types.newParameterizedType(
@@ -61,13 +57,13 @@ class NewsRepository (val app: Application){
             val moshi = Moshi.Builder()
                     .add(KotlinJsonAdapterFactory())
                     .build()
-            val adapter: JsonAdapter<NewsApiJSON> =
+            val adapter: JsonAdapter<Article> =
                     moshi.adapter(listTypeArticle)
 //            newsData2 = adapter.fromJson(text)
-            newsData1.value = adapter.fromJson(data)
+//            newsArticle.value = adapter.fromJson(data)
             val newsD = adapter.fromJson(data)
-            Log.i(LOG_TAG,
-                        "${newsD!!.articles} (\$${newsD.status})")
+//            Log.i(LOG_TAG,
+//                        "${newsD!!.articles} (\$${newsD.status})")
         }
     }
 
@@ -122,23 +118,23 @@ class NewsRepository (val app: Application){
 ////        return adapter.fromJson() ?: emptyList()
 //    }
 
-    private fun saveDataToCache(newsData: NewsApiJSON) {
-//        if (ContextCompat.checkSelfPermission(app,
-//                        Manifest.permission.WRITE_EXTERNAL_STORAGE)
-//                == PackageManager.PERMISSION_GRANTED
-//        ) {
+//    private fun saveDataToCache(newsData: NewsApiJSON) {
+////        if (ContextCompat.checkSelfPermission(app,
+////                        Manifest.permission.WRITE_EXTERNAL_STORAGE)
+////                == PackageManager.PERMISSION_GRANTED
+////        ) {
+////
+////        }
 //
-//        }
-
-        Log.i(LOG_TAG, "Bik talak")
-            val moshi = Moshi.Builder().build()
-            val listType = Types.newParameterizedType(List::class.java, NewsApiJSON::class.java)
-            val adapter: JsonAdapter<NewsApiJSON> = moshi.adapter(listType)
-//        val s = adapter.
-            val json = adapter.toJson((newsData))
-            saveTextToFile(app, json)
-
-    }
+//        Log.i(LOG_TAG, "Bik talak")
+//            val moshi = Moshi.Builder().build()
+//            val listType = Types.newParameterizedType(List::class.java, NewsApiJSON::class.java)
+//            val adapter: JsonAdapter<NewsApiJSON> = moshi.adapter(listType)
+////        val s = adapter.
+//            val json = adapter.toJson((newsData))
+////            saveTextToFile(app, json)
+//
+//    }
 
     fun saveTextToFile(app: Application, json: String?) {
         val file = File(app.cacheDir, "news.json")
@@ -153,16 +149,16 @@ class NewsRepository (val app: Application){
         } else null
     }
 
-    private fun readDataFromCache(): List<NewsApiJSON> {
-        val json = readTextFile(app)
-        if (json == null) {
-            Log.i(LOG_TAG, "There is no file!")
-            return emptyList()
-        }
-        val moshi = Moshi.Builder().build()
-        val listType = Types.newParameterizedType(List::class.java, NewsApiJSON::class.java)
-        val adapter: JsonAdapter<List<NewsApiJSON>> = moshi.adapter(listType)
-        return adapter.fromJson(json) ?: emptyList()
-    }
+//    private fun readDataFromCache(): List<NewsApiJSON> {
+//        val json = readTextFile(app)
+//        if (json == null) {
+//            Log.i(LOG_TAG, "There is no file!")
+//            return emptyList()
+//        }
+//        val moshi = Moshi.Builder().build()
+//        val listType = Types.newParameterizedType(List::class.java, NewsApiJSON::class.java)
+//        val adapter: JsonAdapter<List<NewsApiJSON>> = moshi.adapter(listType)
+//        return adapter.fromJson(json) ?: emptyList()
+//    }
 
 }

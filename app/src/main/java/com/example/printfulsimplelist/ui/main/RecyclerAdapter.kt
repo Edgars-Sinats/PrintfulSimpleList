@@ -1,4 +1,4 @@
-package com.example.printfulsimplelist.adapters
+package com.example.printfulsimplelist.ui.main
 
 import android.content.Intent
 import android.net.Uri
@@ -21,9 +21,9 @@ class RecyclerAdapter(
 ) : RecyclerView.Adapter<RecyclerAdapter.ViewHolder>() {
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
-        val itemTitle: TextView = itemView.findViewById(R.id.tv_title)
-        val itemDetal: TextView = itemView.findViewById(R.id.tv_description)
-        val itemPicture: ImageView = itemView.findViewById(R.id.iv_image)
+        val itemTitle: TextView = itemView.findViewById(R.id.titletext)
+        val itemDetal: TextView = itemView.findViewById(R.id.descriptionText)
+        val itemPicture: ImageView = itemView.findViewById(R.id.newsImage)
 
 
         init {
@@ -39,12 +39,12 @@ class RecyclerAdapter(
 
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerAdapter.ViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val v = LayoutInflater.from(parent.context).inflate(R.layout.item_layout,parent,false)
         return ViewHolder(v)
     }
 
-    override fun onBindViewHolder(holder: RecyclerAdapter.ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.itemTitle.text = titles[position]
         holder.itemDetal.text = details[position]
 

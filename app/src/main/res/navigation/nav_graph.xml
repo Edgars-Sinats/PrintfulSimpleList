@@ -10,9 +10,9 @@
             android:name="com.example.printfulsimplelist.ui.main.MainFragment"
             android:label="main_fragment"
             tools:layout="@layout/fragment_main">
-<!--        <action-->
-<!--                android:id="@+id/action_nav_detail"-->
-<!--                app:destination="@id/detailFragment" />-->
+        <action
+                android:id="@+id/action_nav_detail"
+                app:destination="@id/detailFragment" />
     </fragment>
 
     <fragment
@@ -24,10 +24,10 @@
         android:id="@+id/action_nav_main"
         app:destination="@id/mainFragment" />
 
-<!--    <fragment-->
-<!--            android:id="@+id/detailFragment"-->
-<!--            android:name="com.example.printfulsimplelist.ui.detail.DetailFragment"-->
-<!--            android:label="fragment_detail"-->
-<!--            tools:layout="@layout/fragment_detail" />-->
+    <fragment
+            android:id="@+id/detailFragment"
+            android:name="com.example.printfulsimplelist.ui.detail.DetailFragment"
+            android:label="fragment_detail"
+            tools:layout="@layout/fragment_detail" />
 
 </navigation>
