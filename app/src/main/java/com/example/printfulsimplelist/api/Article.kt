@@ -2,7 +2,7 @@ package com.example.printfulsimplelist.api
 
 import com.squareup.moshi.JsonClass
 
-@JsonClass(generateAdapter = true)
+//@JsonClass(generateAdapter = true)
 data class Article(
     val author: String? = null,
     val content: String? = null,
@@ -12,4 +12,6 @@ data class Article(
     val title: String,
     val url: String,
     val urlToImage: String? = null
-            )
+            ){
+
+}

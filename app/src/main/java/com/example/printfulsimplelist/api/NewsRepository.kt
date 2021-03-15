@@ -1,8 +1,11 @@
 package com.example.printfulsimplelist.api
 
+import android.Manifest
 import android.app.Application
+import android.content.pm.PackageManager
 import android.util.Log
 import androidx.annotation.WorkerThread
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.MutableLiveData
 import com.example.printfulsimplelist.*
 import com.squareup.moshi.JsonAdapter
@@ -26,22 +29,22 @@ class NewsRepository (val app: Application){
 
     init {
         //Will call data locally from cache
-        callDataFromWeb()
+        val data = readDataFromCache()
+        if (data.isEmpty()) {
+            callDataFromWeb()
+        } else {
+            newsArticle.value = data
+            Log.i(LOG_TAG, "Using local data")
+        }
     }
 /**
-//        val data = readDataFromCache()
-//        if (data.isEmpty()) {
-//        } else {
-//            newsData.value = data
-//            Log.i(LOG_TAG, "Using local data")
-//        }
+
 */
 
 
     fun callDataFromWeb() {
         CoroutineScope(Dispatchers.IO).launch {
             callWebService()
-
 //            getTextFromAssets()
         }
     }
@@ -76,6 +79,7 @@ class NewsRepository (val app: Application){
         val service = retrofit.create(APIRequest::class.java)
         val response = service.getNews().body()?.articles ?: emptyList()
         newsArticle.postValue(response)
+        saveDataToCache(response)
 
     }
 
@@ -98,15 +102,30 @@ class NewsRepository (val app: Application){
         } else null
     }
 
-    private fun readDataFromCache(): List<NewsApiJSON> {
-        val json = readTextFile(app)
+    private fun saveDataToCache(ArticleData: List<Article>) {
+        if (ContextCompat.checkSelfPermission(
+                        app,
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE
+                )
+                == PackageManager.PERMISSION_GRANTED
+        ) {
+            val moshi = Moshi.Builder().add(KotlinJsonAdapterFactory()).build()
+            val listType = Types.newParameterizedType(List::class.java, Article::class.java)
+            val adapter: JsonAdapter<List<Article>> = moshi.adapter(listType)
+            val json = adapter.toJson(ArticleData)
+            FileHelper.saveTextToFile(app, json)
+        }
+    }
+
+    private fun readDataFromCache(): List<Article> {
+        val json = FileHelper.readTextFile(app)
         if (json == null) {
             Log.i(LOG_TAG, "There is no file!")
             return emptyList()
         }
-        val moshi = Moshi.Builder().build()
-        val listType = Types.newParameterizedType(List::class.java, NewsApiJSON::class.java)
-        val adapter: JsonAdapter<List<NewsApiJSON>> = moshi.adapter(listType)
+        val moshi = Moshi.Builder().add(KotlinJsonAdapterFactory()).build()
+        val listType = Types.newParameterizedType(List::class.java, Article::class.java)
+        val adapter: JsonAdapter<List<Article>> = moshi.adapter(listType)
         return adapter.fromJson(json) ?: emptyList()
     }
 

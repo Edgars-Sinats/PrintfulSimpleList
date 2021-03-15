@@ -65,12 +65,12 @@ class   SplashFragment : Fragment() {
         )
 
         //When back button clicked, user won`t go back on splash screen, but will exit app.(inclusive: true)
-//        navController.navigate(
-//            R.id.action_nav_main, null,
-//            NavOptions.Builder()
-//                .setPopUpTo(R.id.splashFragment, true)
-//                .build()
-//        )
+        navController.navigate(
+            R.id.action_nav_main, null,
+            NavOptions.Builder()
+                .setPopUpTo(R.id.splashFragment, true)
+                .build()
+        )
     }
 
 }

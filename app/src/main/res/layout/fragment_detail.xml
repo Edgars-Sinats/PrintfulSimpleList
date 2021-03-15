@@ -49,14 +49,13 @@
                     android:layout_margin="8dp"
                     android:layout_marginTop="16dp"
                     app:urlToImage="@{viewModel.selectedArticle.urlToImage}"
-
                     app:layout_constraintBottom_toTopOf="@+id/authorText"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintDimensionRatio="2:1"
                     tools:src="@drawable/uzvaretajs_lideris_karalis_53012935"
                     tools:contentDescription="Monster name"/>
-                <!--            app:layout_constraintTop_toBottomOf="@+id/titleText"-->
+<!--                            app:layout_constraintTop_toBottomOf="@+id/titleText"-->
 
 
 
