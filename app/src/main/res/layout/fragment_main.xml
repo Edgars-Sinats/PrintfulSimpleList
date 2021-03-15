@@ -25,7 +25,6 @@
         android:layout_marginStart="8dp"
         app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
         />
-<!--        app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"-->
 
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 

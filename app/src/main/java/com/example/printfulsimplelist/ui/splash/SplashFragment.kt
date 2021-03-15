@@ -12,6 +12,10 @@ import androidx.core.content.ContextCompat
 import androidx.navigation.NavOptions
 import androidx.navigation.Navigation
 import com.example.printfulsimplelist.R
+/**
+ * This fragment will be meant 1. time,
+ * when user first time open app to grant access for permissions.
+*/
 
 const val PERMISSION_REQUEST_CODE = 1001
 
@@ -61,12 +65,12 @@ class   SplashFragment : Fragment() {
         )
 
         //When back button clicked, user won`t go back on splash screen, but will exit app.(inclusive: true)
-        navController.navigate(
-            R.id.action_nav_main, null,
-            NavOptions.Builder()
-                .setPopUpTo(R.id.splashFragment, true)
-                .build()
-        )
+//        navController.navigate(
+//            R.id.action_nav_main, null,
+//            NavOptions.Builder()
+//                .setPopUpTo(R.id.splashFragment, true)
+//                .build()
+//        )
     }
 
 }

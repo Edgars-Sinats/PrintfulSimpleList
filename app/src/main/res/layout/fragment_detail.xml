@@ -22,7 +22,7 @@
             android:id="@+id/titleText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-                android:text="@{viewModel.selectedArticle.title}"
+            android:text="@{viewModel.selectedArticle.title}"
 
             android:textStyle="bold"
             android:textSize="24sp"
@@ -32,69 +32,87 @@
             tools:text="Biatlonistu Rastorgujevu uz laiku atstādina par iespējamu antidopinga noteikumu pārkāpumu - Lsm.lv" />
 
 
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintTop_toBottomOf="@id/titleText"
+            app:layout_constraintBottom_toBottomOf="parent">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:id="@+id/newsImage"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_margin="8dp"
+                    android:layout_marginTop="16dp"
+                    app:urlToImage="@{viewModel.selectedArticle.urlToImage}"
+
+                    app:layout_constraintBottom_toTopOf="@+id/authorText"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintDimensionRatio="2:1"
+                    tools:src="@drawable/uzvaretajs_lideris_karalis_53012935"
+                    tools:contentDescription="Monster name"/>
+                <!--            app:layout_constraintTop_toBottomOf="@+id/titleText"-->
 
 
 
-<!--        <ImageView-->
-<!--            android:id="@+id/newsImage"-->
-<!--            android:layout_width="0dp"-->
-<!--            android:layout_height="0dp"-->
-<!--            android:layout_margin="8dp"-->
-<!--            android:layout_marginTop="16dp"-->
-<!--            app:layout_constraintTop_toBottomOf="@+id/titleText"-->
-<!--            app:layout_constraintBottom_toTopOf="@+id/authorText"-->
-<!--            app:layout_constraintStart_toStartOf="parent"-->
-<!--            app:layout_constraintEnd_toEndOf="parent"-->
-<!--            app:layout_constraintDimensionRatio="1:1"-->
-<!--            tools:src="@drawable/uzvaretajs_lideris_karalis_53012935"-->
-<!--            tools:contentDescription="Monster name"/>-->
-<!--&lt;!&ndash;        app:imageUrl="@{viewModel.selectedArticle.urlToImage}"&ndash;&gt;-->
+                <TextView
+                    android:id="@+id/authorText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginBottom="16dp"
+                    app:author="@{viewModel.selectedArticle.author}"
+                    app:layout_constraintTop_toBottomOf="@id/newsImage"
+                    app:layout_constraintStart_toStartOf="@id/newsImage"
+                    android:textStyle="bold"
+
+                    android:textSize="24sp"
+                    tools:text="DELFI Bizness"/>
 
 
-<!--        <TextView-->
-<!--            android:id="@+id/authorText"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_marginTop="16dp"-->
-<!--            android:layout_marginBottom="16dp"-->
 
-<!--            app:layout_constraintTop_toBottomOf="@id/newsImage"-->
-<!--            app:layout_constraintStart_toStartOf="@id/newsImage"-->
-<!--            android:textStyle="bold"-->
-
-<!--            android:textSize="24sp"-->
-<!--            tools:text="DELFI Bizness"/>-->
-<!--&lt;!&ndash;        app:price="@{viewModel.selectedArticle.author}"&ndash;&gt;-->
+                <TextView
+                    android:id="@+id/publishetAtText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:publishedAt="@{viewModel.selectedArticle.publishedAt}"
+                    app:layout_constraintTop_toTopOf="@id/authorText"
+                    app:layout_constraintBottom_toBottomOf="@id/authorText"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    android:textStyle="bold"
+                    android:textSize="24sp"
+                    tools:text="2021-03-11"/>
 
 
-<!--        <TextView-->
-<!--            android:id="@+id/publishetAtText"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
+                <TextView
+                    android:id="@+id/descriptionText"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                    android:text="@{viewModel.selectedArticle.content}"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginBottom="16dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/publishetAtText"
+
+                    tools:text="Mingle excels at doing twice the work in half the time, with pinpoint accuracy.  These skills serve her well in her role as Senior Data Analyst for an international cloud computing company. She's also got a penchant for ballroom dance, line dancing, and pretty much any kind of activity that lets her groove to music."/>
+<!--                app:layout_constraintBottom_toBottomOf="parent"-->
+<!--                app:layout_constraintEnd_toEndOf="parent"-->
 
 
-<!--            app:layout_constraintTop_toTopOf="@id/authorText"-->
-<!--            app:layout_constraintBottom_toBottomOf="@id/authorText"-->
-<!--            app:layout_constraintEnd_toEndOf="parent"-->
-<!--            android:textStyle="bold"-->
-<!--            android:textSize="24sp"-->
-<!--            tools:text="2021-03-11"/>-->
-<!--&lt;!&ndash;        app:price="@{viewModel.selectedArticle.publishedAt}"&ndash;&gt;-->
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </ScrollView>
 
 
-        <TextView
-            android:id="@+id/descriptionText"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
 
-                android:text="@{viewModel.selectedArticle.description}"
-            android:layout_marginTop="16dp"
-            android:layout_marginBottom="16dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            tools:text="Mingle excels at doing twice the work in half the time, with pinpoint accuracy.  These skills serve her well in her role as Senior Data Analyst for an international cloud computing company. She's also got a penchant for ballroom dance, line dancing, and pretty much any kind of activity that lets her groove to music."/>
+
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

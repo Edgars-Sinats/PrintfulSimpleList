@@ -32,13 +32,10 @@ class DetailFragment : Fragment() {
                 requireActivity(), R.id.nav_host
         )
 
-        viewModel = ViewModelProvider(this).get(SharedViewModel::class.java)
+        viewModel = ViewModelProvider(requireActivity()).get(SharedViewModel::class.java)
 //        viewModel.selectedArticle.observe(this, Observer {
 //            Log.i(LOG_TAG, "Selected article: ${it.title}")
 //        })
-
-
-
         val binding = FragmentDetailBinding.inflate(
                 inflater, container, false
         )
@@ -50,7 +47,7 @@ class DetailFragment : Fragment() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (item?.itemId == android.R.id.home) {
+        if (item.itemId == android.R.id.home) {
             navController.navigateUp()
         }
         return super.onOptionsItemSelected(item)

@@ -15,14 +15,14 @@
                 app:destination="@id/detailFragment" />
     </fragment>
 
-    <fragment
-        android:id="@+id/splashFragment"
-        android:name="com.example.printfulsimplelist.ui.splash.SplashFragment"
-        android:label="fragment_splash"
-        tools:layout="@layout/fragment_splash" />
-    <action
-        android:id="@+id/action_nav_main"
-        app:destination="@id/mainFragment" />
+<!--    <fragment-->
+<!--        android:id="@+id/splashFragment"-->
+<!--        android:name="com.example.printfulsimplelist.ui.splash.SplashFragment"-->
+<!--        android:label="fragment_splash"-->
+<!--        tools:layout="@layout/fragment_splash" />-->
+<!--    <action-->
+<!--        android:id="@+id/action_nav_main"-->
+<!--        app:destination="@id/mainFragment" />-->
 
     <fragment
             android:id="@+id/detailFragment"
